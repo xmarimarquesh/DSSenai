@@ -2,7 +2,6 @@ import express, { Request, Response, Router } from 'express';
 import Person from '../models/Person.ts';
 const router: Router = express.Router();
 
-
 // REQUISIÇÃO COM MODELS
 
 router.post('/register', async (req: Request, res: Response) => {
