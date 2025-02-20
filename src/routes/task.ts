@@ -1,5 +1,5 @@
 import express, { Request, Response, Router } from 'express';
-import Person from '../models/Person.ts';
+import Task from '../models/Task.ts';
 const router: Router = express.Router();
 
 // REQUISIÇÃO COM MODELS
@@ -7,41 +7,41 @@ const router: Router = express.Router();
 router.post('/register', async (req: Request, res: Response) => {
     const { name, age } = req.body;
     try {
-        const person = new Person({ name, age });
-        await person.save();
-        res.status(201).json(person);
+        const task = new Task({ name, age });
+        await task.save();
+        res.status(201).json(task);
     } catch (error) {
         res.status(400).json({ message: 'Erro ao criar pessoa', error });
     }
 })
-.get('/people', async (req: Request, res: Response) => {
+.get('/task', async (req: Request, res: Response) => {
     try {
-    const people = await Person.find();
-    res.status(200).json(people);
+        const task = await Task.find();
+        res.status(200).json(task);
     } catch (error) {
-    res.status(400).json({ message: 'Erro ao buscar pessoas', error });
+        res.status(400).json({ message: 'Erro ao buscar pessoas', error });
     }
 })
-.put('/person/:id', async (req: Request, res: Response) => {
+.put('/task/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     const { name, age } = req.body;
 
     try {
-        const person = await Person.findByIdAndUpdate(id, { name, age }, { new: true });
-        if (!person) {
+        const task = await Task.findByIdAndUpdate(id, { name, age }, { new: true });
+        if (!task) {
             res.status(404).json({ message: 'Pessoa não encontrada' });
         }
-        res.status(200).json(person);
+        res.status(200).json(task);
     } catch (error) {
         res.status(400).json({ message: 'Erro ao atualizar pessoa', error });
     }
 })
-.delete('/person/:id', async (req: Request, res: Response) => {
+.delete('/task/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     
     try {
-        const person = await Person.findByIdAndDelete(id);
-        if (!person) {
+        const task = await Task.findByIdAndDelete(id);
+        if (!task) {
             res.status(404).json({ message: 'Pessoa não encontrada' });
         }
         res.status(200).json({ message: 'Pessoa deletada com sucesso' });
@@ -58,26 +58,26 @@ router.post('/register', async (req: Request, res: Response) => {
 //     sobrenome: string;
 //     email: string;
 // }
-// const people: Pessoa[] = [];
+// const task: Pessoa[] = [];
 // var ids = 1;
 
 // .post('/usuarios', (req: Request, res: Response) => {
 //     const pessoa = req.body
 //     pessoa.id = ids++
-//     people.push(pessoa)
+//     task.push(pessoa)
 //     res.status(200).send(`Pessoa ${pessoa.nome} ${pessoa.sobrenome} | email: ${pessoa.email} recebida com sucesso!`);
 // })
 // .get('/usuarios', (req: Request, res: Response) => {
-//     res.status(200).json(people)
+//     res.status(200).json(task)
 // })
 // .get('/usuarios/:id', (req: Request, res: Response) => {
 //     const { id } = req.params
-//     res.status(200).json(people.find(pessoa => pessoa.id === parseInt(id)))
+//     res.status(200).json(task.find(pessoa => pessoa.id === parseInt(id)))
 // })
 // .put('/usuarios/:id', (req: Request, res: Response) => {
 //     const { id } = req.params;
 //     const { nome, sobrenome, email } = req.body;
-//     const pessoa = people.find(pessoa => pessoa.id === parseInt(id));
+//     const pessoa = task.find(pessoa => pessoa.id === parseInt(id));
 //     if (pessoa) {
 //         pessoa.email = email
 //         pessoa.nome = nome
@@ -88,7 +88,7 @@ router.post('/register', async (req: Request, res: Response) => {
 // .patch('/atualizar/:id', (req: Request, res: Response) => {
 //     const { id } = req.params;
 //     const { nome } = req.body;
-//     const pessoa = people.find(pessoa => pessoa.id === parseInt(id));
+//     const pessoa = task.find(pessoa => pessoa.id === parseInt(id));
 //     if (pessoa) {
 //         pessoa.nome = nome
 //         res.send(`Nome da pessoa com ID ${id} foi atualizado para: ${nome}`);
@@ -96,10 +96,8 @@ router.post('/register', async (req: Request, res: Response) => {
 // })
 // .delete('/deletar/:id', (req: Request, res: Response) => {
 //     const { id } = req.params;
-//     people.splice(people.findIndex(pessoa => pessoa.id === parseInt(id)), 1)
+//     task.splice(task.findIndex(pessoa => pessoa.id === parseInt(id)), 1)
 //     res.status(200).send(`Pessoa com o id: ${id} foi deletada `)
 // })
-
-
 
 export default router;
