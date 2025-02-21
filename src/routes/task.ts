@@ -1,54 +1,15 @@
 import express, { Request, Response, Router } from 'express';
 import Task from '../models/Task.ts';
 const router: Router = express.Router();
+import TaskController from "../controllers/TaskController.ts";
 
 // REQUISIÇÃO COM MODELS
 
-router.post('/register', async (req: Request, res: Response) => {
-    const { name, age } = req.body;
-    try {
-        const task = new Task({ name, age });
-        await task.save();
-        res.status(201).json(task);
-    } catch (error) {
-        res.status(400).json({ message: 'Erro ao criar pessoa', error });
-    }
-})
-.get('/task', async (req: Request, res: Response) => {
-    try {
-        const task = await Task.find();
-        res.status(200).json(task);
-    } catch (error) {
-        res.status(400).json({ message: 'Erro ao buscar pessoas', error });
-    }
-})
-.put('/task/:id', async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const { name, age } = req.body;
-
-    try {
-        const task = await Task.findByIdAndUpdate(id, { name, age }, { new: true });
-        if (!task) {
-            res.status(404).json({ message: 'Pessoa não encontrada' });
-        }
-        res.status(200).json(task);
-    } catch (error) {
-        res.status(400).json({ message: 'Erro ao atualizar pessoa', error });
-    }
-})
-.delete('/task/:id', async (req: Request, res: Response) => {
-    const { id } = req.params;
-    
-    try {
-        const task = await Task.findByIdAndDelete(id);
-        if (!task) {
-            res.status(404).json({ message: 'Pessoa não encontrada' });
-        }
-        res.status(200).json({ message: 'Pessoa deletada com sucesso' });
-    } catch (error) {
-        res.status(400).json({ message: 'Erro ao deletar pessoa', error });
-    }
-});
+router.get("/task", TaskController.getTasks);
+router.post("/register", TaskController.createTask);
+router.delete("/task/:id", TaskController.deleteTask);
+router.put("/task/:id", TaskController.updateTask);
+// router.get("/task/:id", TaskController.getTask);
 
 // REQUISIÇÃO COM LISTA SIMPLES
 
